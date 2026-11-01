@@ -26,9 +26,10 @@ the activities of patients and doctors while preventing
 race conditions and deadlocks.
 
 ## Repo Layout
-os-hospital-er/
+```
+Hospital-Simulation/
 ├── README.md              
-├── .gitignore             
+├── .gitignore             # out/  logs/  *.class  .idea/  *.iml  .vscode/
 ├── src/
 │   ├── Hospital.java
 │   ├── Semaphore.java
@@ -38,7 +39,8 @@ os-hospital-er/
 │   ├── Doctor.java
 │   └── Logger.java
 └── docs/
-    └── docs.md    
+    └── docs.md            
+```   
     
 ## Features
 
