@@ -25,6 +25,21 @@ The system uses Java threads and semaphores to coordinate
 the activities of patients and doctors while preventing
 race conditions and deadlocks.
 
+## Repo Layout
+os-hospital-er/
+├── README.md              
+├── .gitignore             
+├── src/
+│   ├── Hospital.java
+│   ├── Semaphore.java
+│   ├── TreatmentRoomManager.java
+│   ├── WaitingRoom.java
+│   ├── Patient.java
+│   ├── Doctor.java
+│   └── Logger.java
+└── docs/
+    └── docs.md    
+    
 ## Features
 
 - Multithreaded patient and doctor simulation.
