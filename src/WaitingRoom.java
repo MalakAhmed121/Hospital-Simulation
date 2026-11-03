@@ -62,14 +62,14 @@ public class WaitingRoom {
             throws InterruptedException {
 
         if (!tryEnterWaitingRoom(patient)) {
-            System.out.println("The waiting room is full.");
-            System.out.println("P" + patient.getPatientId()
+            Logger.log("The waiting room is full.");
+            Logger.log("P" + patient.getPatientId()
                     + " is waiting outside for an available seat.");
 
             enterWaitingRoom(patient);
         }
 
-        System.out.println("P" + patient.getPatientId()
+        Logger.log("P" + patient.getPatientId()
                 + " entered the waiting room.");
     }
 }

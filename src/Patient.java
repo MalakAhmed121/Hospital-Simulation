@@ -12,19 +12,19 @@ public class Patient extends Thread {
     @Override
     public void run() {
         try {
-            System.out.println("P" + patientId + " arrived.");
+            Logger.log("P" + patientId + " arrived.");
 
             boolean entered = waitingRoom.tryEnterWaitingRoom(this);
 
             if (!entered) {
-                System.out.println("The waiting room is full.");
-                System.out.println("P" + patientId +
+                Logger.log("The waiting room is full.");
+                Logger.log("P" + patientId +
                         " is waiting outside for an available seat.");
 
                 waitingRoom.enterWaitingRoom(this);
             }
 
-            System.out.println("P" + patientId +
+            SLogger.log("P" + patientId +
                     " entered the waiting room.");
 
             synchronized (this) {
@@ -33,7 +33,7 @@ public class Patient extends Thread {
                 }
             }
 
-            System.out.println("P" + patientId + " left.");
+            Logger.log("P" + patientId + " left.");
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
