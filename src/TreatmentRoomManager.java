@@ -1,17 +1,14 @@
 public class TreatmentRoomManager {
-    private final Semaphore roomSemaphore;
-
-    public TreatmentRoomManager(int totalRooms) {
-        this.roomSemaphore = new Semaphore(totalRooms);
-    }
+    private static final int ROOM_COUNT = 2;
+    private final Semaphore availableRooms = new Semaphore(ROOM_COUNT);
 
     public boolean acquireRoom(long timeOut)
             throws InterruptedException {
-        return roomSemaphore.tryP(timeOut);
+        return availableRooms.tryP(timeOut);
     }
 
     // Release the treatment room after treatment is done
     public void releaseRoom() {
-        roomSemaphore.V();
+        availableRooms.V();
     }
 }
