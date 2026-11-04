@@ -10,14 +10,14 @@ public class WaitingRoom {
 
     public WaitingRoom(int capacity) {
         patients = new LinkedList<>();
-
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Waiting room capacity must be greater than zero.");
+        }
         empty = new Semaphore(capacity);
         full = new Semaphore(0);
     }
 
-    public boolean tryEnterWaitingRoom(Patient patient)
-            throws InterruptedException {
-
+    public boolean tryEnterWaitingRoom(Patient patient) throws InterruptedException {
         if (!empty.tryP(0)) {
             return false;
         }
@@ -26,25 +26,19 @@ public class WaitingRoom {
         return true;
     }
 
-    public void enterWaitingRoom(Patient patient)
-            throws InterruptedException {
-
+    public void enterWaitingRoom(Patient patient) throws InterruptedException {
         empty.P();
         addPatient(patient);
     }
 
     private void addPatient(Patient patient) {
-
         synchronized (patients) {
             patients.add(patient);
         }
-
         full.V();
     }
 
-    public Patient takePatient()
-    throws InterruptedException {
-
+    public Patient takePatient() throws InterruptedException {
         full.P();
 
         Patient patient;
@@ -58,18 +52,17 @@ public class WaitingRoom {
         return patient;
     }
 
-    public void returnPatient(Patient patient)
-            throws InterruptedException {
+    public void returnPatient(Patient patient) throws InterruptedException {
 
         if (!tryEnterWaitingRoom(patient)) {
             Logger.log("The waiting room is full.");
-            Logger.log("P" + patient.getPatientId()
+            Logger.log("P " + patient.getPatientId()
                     + " is waiting outside for an available seat.");
 
             enterWaitingRoom(patient);
         }
 
-        Logger.log("P" + patient.getPatientId()
+        Logger.log("P " + patient.getPatientId()
                 + " entered the waiting room.");
     }
 }

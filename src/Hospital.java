@@ -1,46 +1,68 @@
+import java.util.Scanner;
+
 public class Hospital {
 
-    private WaitingRoom waitingRoom;
-    private TreatmentRoomManager treatmentRoomManager;
+    public static void main(String[] args) {
 
-    private int totalPatients;
-    private int treatedPatients;
-    private int totalDoctors;
-    private int waitingRoomCapacity;
+        Scanner input = new Scanner(System.in);
 
-    private Doctor[] doctors;
-    private Patient[] patients;
+        // get simulation information from the user.
+        System.out.print("Enter waiting room capacity: ");
+        int capacity = input.nextInt();
 
-    public Hospital(int capacity, int doctorCount, int patientCount) {
+        System.out.print("Enter number of doctors: ");
+        int doctorsCount = input.nextInt();
 
-        if (capacity <= 0 || doctorCount <= 0 || patientCount <= 0) {
-            throw new IllegalArgumentException("Invalid input values.");
+        System.out.print("Enter number of patients: ");
+        int patientsCount = input.nextInt();
+
+        // create the shared resources.
+        WaitingRoom waitingRoom = new WaitingRoom(capacity);
+        TreatmentRoomManager treatmentRoomManager = new TreatmentRoomManager();
+
+        // create and start doctors.
+        Doctor[] doctors = new Doctor[doctorsCount];
+        for (int i = 0; i < doctorsCount; i++) {
+            doctors[i] = new Doctor(
+                    i + 1,
+                    waitingRoom,
+                    treatmentRoomManager
+            );
+            doctors[i].start();
         }
 
-        this.totalPatients = patientCount;
-        this.totalDoctors = doctorCount;
-        this.waitingRoomCapacity = capacity;
+        // create and start patients.
+        Patient[] patients = new Patient[patientsCount];
+        for (int i = 0; i < patientsCount; i++) {
+            patients[i] = new Patient(
+                    i + 1,
+                    waitingRoom
+            );
+            patients[i].start();
+        }
 
-        initializeResources();
-        initializeDoctors();
-        initializePatients();
+        try {
+            // wait until all patients finish.
+            for (int i = 0; i < patientsCount; i++) {
+                patients[i].join();
+            }
+            Logger.log("All patients have been treated.");
+
+            // stop all doctors.
+            for (int i = 0; i < doctorsCount; i++) {
+                doctors[i].interrupt();
+            }
+            // wait until all doctors stop.
+            for (int i = 0; i < doctorsCount; i++) {
+                doctors[i].join();
+            }
+
+            Logger.log("Simulation completed.");
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            Logger.log("Simulation interrupted.");
+        }
+        input.close();
     }
-
-    private void initializeResources() {
-       waitingRoom = new WaitingRoom(waitingRoomCapacity);
-       treatmentRoomManager = new TreatmentRoomManager(2);
-    }
-
-   private void initializeDoctors(){};
-
-   private void initializePatients(){
-    patients=new Patient[totalPatients];
-    for(int i=0;i<totalPatients;i++){
-        patients[i]=new Patient(i+1,waitingRoom);
-    }
-
-   };
-
-   public void startSimulation() { }
-
 }
