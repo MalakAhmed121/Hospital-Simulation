@@ -20,6 +20,12 @@ public class Hospital {
         WaitingRoom waitingRoom = new WaitingRoom(capacity);
         TreatmentRoomManager treatmentRoomManager = new TreatmentRoomManager();
 
+        Logger.log("Patients arriving:");
+        String list = "";
+        for (int i = 1; i <= patientsCount; i++) {
+            list += "P" + i + " ";
+        }
+        Logger.log(list.trim());
         // create and start doctors.
         Doctor[] doctors = new Doctor[doctorsCount];
         for (int i = 0; i < doctorsCount; i++) {

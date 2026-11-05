@@ -16,10 +16,9 @@ public class Doctor extends Thread{
     public void run() {
         while (!isInterrupted()) {
             try {
-                Patient patient = waitingRoom.takePatient();
+                Patient patient = waitingRoom.takePatient(doctorId);
 
                 if (patient != null) {
-                    Logger.log("Doctor " + doctorId + " is assigned to " + patient.getPatientId() + ".");
                     Logger.log("Doctor " + doctorId + " is trying to acquire a treatment room.");
 
                     boolean roomAcquired = treatmentRoomManager.acquireRoom(ROOM_ACQUIRE_TIMEOUT);
@@ -27,8 +26,6 @@ public class Doctor extends Thread{
                         Logger.log("Doctor " + doctorId + " could not acquire a treatment room.");
                         Logger.log("Doctor " + doctorId + " is sending " + patient.getPatientId() + " back to the waiting room.");
                         if (!waitingRoom.tryEnterWaitingRoom(patient)) {
-                            Logger.log("The waiting room is full.");
-                            Logger.log("P " + patient.getPatientId() + " is waiting outside for an available seat.");
                             waitingRoom.enterWaitingRoom(patient);
                         }
                         Logger.log("Doctor " + doctorId + " is now available.");
