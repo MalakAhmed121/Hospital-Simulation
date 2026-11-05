@@ -18,11 +18,19 @@ public class WaitingRoom {
     }
 
     public boolean tryEnterWaitingRoom(Patient patient) throws InterruptedException {
-        if (!empty.tryP(0)) {
-            return false;
+        synchronized (patients) {
+            if (!empty.tryP(0)) {
+                Logger.log("The waiting room is full.");
+                Logger.log("P " + patient.getPatientId()
+                        + " is waiting outside for an available seat.");
+                return false;
+            }
+
+            patients.add(patient);
+            Logger.log("P" + patient.getPatientId() + " entered the waiting room.");
         }
 
-        addPatient(patient);
+        full.V();
         return true;
     }
 
@@ -34,35 +42,30 @@ public class WaitingRoom {
     private void addPatient(Patient patient) {
         synchronized (patients) {
             patients.add(patient);
+            Logger.log("P" + patient.getPatientId() + " entered the waiting room.");
         }
         full.V();
     }
 
-    public Patient takePatient() throws InterruptedException {
+    public Patient takePatient(int doctorId) throws InterruptedException {
         full.P();
 
         Patient patient;
 
         synchronized (patients) {
             patient = patients.remove();
+            Logger.log("Doctor " + doctorId + " is assigned to "
+                    + patient.getPatientId() + ".");
+            Logger.log("P " + patient.getPatientId() + " left the waiting room.");
         }
 
         empty.V();
-
         return patient;
     }
 
     public void returnPatient(Patient patient) throws InterruptedException {
-
         if (!tryEnterWaitingRoom(patient)) {
-            Logger.log("The waiting room is full.");
-            Logger.log("P " + patient.getPatientId()
-                    + " is waiting outside for an available seat.");
-
             enterWaitingRoom(patient);
         }
-
-        Logger.log("P " + patient.getPatientId()
-                + " entered the waiting room.");
     }
 }

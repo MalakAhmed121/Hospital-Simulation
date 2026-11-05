@@ -17,15 +17,8 @@ public class Patient extends Thread {
             boolean entered = waitingRoom.tryEnterWaitingRoom(this);
 
             if (!entered) {
-                Logger.log("The waiting room is full.");
-                Logger.log("P " + patientId +
-                        " is waiting outside for an available seat.");
-
                 waitingRoom.enterWaitingRoom(this);
             }
-
-            Logger.log("P" + patientId +
-                    " entered the waiting room.");
 
             synchronized (this) {
                 while (!treated) {
