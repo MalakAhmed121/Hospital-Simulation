@@ -21,7 +21,7 @@ public class WaitingRoom {
         synchronized (patients) {
             if (!empty.tryP(0)) {
                 Logger.log("The waiting room is full.");
-                Logger.log("P " + patient.getPatientId()
+                Logger.log("P" + patient.getPatientId()
                         + " is waiting outside for an available seat.");
                 return false;
             }
@@ -54,9 +54,9 @@ public class WaitingRoom {
 
         synchronized (patients) {
             patient = patients.remove();
-            Logger.log("Doctor " + doctorId + " is assigned to "
+            Logger.log("Doctor" + doctorId + " is assigned to patient"
                     + patient.getPatientId() + ".");
-            Logger.log("P " + patient.getPatientId() + " left the waiting room.");
+            Logger.log("P" + patient.getPatientId() + " left the waiting room.");
         }
 
         empty.V();
