@@ -12,8 +12,7 @@ public class Patient extends Thread {
     @Override
     public void run() {
         try {
-            Logger.log("P " + patientId + " arrived.");
-
+            Logger.log("P" + patientId + " arrived.");
             boolean entered = waitingRoom.tryEnterWaitingRoom(this);
 
             if (!entered) {
@@ -27,7 +26,6 @@ public class Patient extends Thread {
             }
 
             Logger.log("P" + patientId + " left.");
-
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

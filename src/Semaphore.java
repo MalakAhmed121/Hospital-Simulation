@@ -13,8 +13,8 @@ public class Semaphore{
         value--;
     }
     public synchronized void V(){        //release()
-    value++;
-    notifyAll();
+        value++;
+        notifyAll();
     }
 
     public synchronized boolean tryP(long timeOut) throws  InterruptedException {
@@ -22,8 +22,9 @@ public class Semaphore{
 
         while (value<=0){
             long remaining = deadline - System.currentTimeMillis();
-            if (remaining <= 0){ return false;}
-
+            if (remaining <= 0){ 
+                return false;
+            }
             wait(remaining);
         }
         value--;
